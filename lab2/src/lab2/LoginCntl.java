@@ -15,6 +15,7 @@ public class LoginCntl {
     private UserList currentUserList;
     private User currentUser;
     private AES theAES = new AES();
+    private Boolean userName = false;
     
     public LoginCntl()
     {
@@ -48,13 +49,14 @@ public class LoginCntl {
                      theLoginUI.setTextofJlabel5("Incorrect Password!");
                      System.out.println("Inccorrect Password!");
                  }
+                 userName = true;
              }
-             else{
-                theLoginUI.setTextofJlabel5("Username doesn't exist!");
-                System.out.println("Username doesn't exist!");
-             }
-             return;
         }
+        if (userName == false)
+        {
+            theLoginUI.setTextofJlabel5("Username doesn't exist!");
+            System.out.println("Username doesn't exist!");
+        }        
     }
     public void registerClicked()
     {
