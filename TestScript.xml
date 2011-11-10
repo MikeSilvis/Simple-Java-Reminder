@@ -1,0 +1,72 @@
+<project name="Reminders" basedir="." default="run-all">
+    <property file = "build.properties"/>
+    
+    <target name="clean">
+    	<delete dir="${binDirectory}"/>
+	<delete dir="${distDirectory}"/>
+    </target>
+
+    <target name="compile-all" depends="clean">
+	<mkdir dir="${binDirectory}"/>
+	<copy todir="${binDirectory}">
+	    <fileset dir="${srcDirectory}" includes="**/*.properties"/>
+        </copy>
+        <unzip dest="${binDirectory}">
+	<fileset dir="${libDirectory}/"> 
+		<include name="**/*.jar"/>
+	</fileset>
+        </unzip>
+	<javac srcdir="${srcDirectory}" destdir="${binDirectory}" includeAntRuntime="false" fork="true"/>	
+    </target>
+
+    <target name="build-all" depends="compile-all">
+        <mkdir dir="${distDirectory}"/>
+        <jar destfile="${distDirectory}/${appName}.jar" basedir="${binDirectory}">
+            <manifest>
+                <attribute name="Main-Class" value="${mainClass}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run-all" depends="build-all">
+        <java jar="${distDirectory}/${appName}.jar" fork="true"/>
+    </target>
+
+    <target name="compile">
+	<javac srcdir="${srcDirectory}" destdir="${binDirectory}" includeAntRuntime="false" fork="true"/>	
+    </target>
+
+    <target name="build" depends="compile">
+        <delete file="${distDirectory}/${appName}.jar"/>
+        <jar destfile="${distDirectory}/${appName}.jar" basedir="${binDirectory}">
+            <manifest>
+                <attribute name="Main-Class" value="${mainClass}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="build">
+        <java jar="${distDirectory}/${appName}.jar" fork="true"/>
+    </target>
+
+    <target name="build-ind">
+        <delete file="${distDirectory}/${appName}.jar"/>
+        <jar destfile="${distDirectory}/${appName}.jar" basedir="${binDirectory}">
+            <manifest>
+                <attribute name="Main-Class" value="${mainClass}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run-ind">
+        <java jar="${distDirectory}/${appName}.jar" fork="true"/>
+    </target>
+
+    <target name="doc">
+        <javadoc destdir="${docDirectory}" author="true" version="true" use="true">
+	    <packageset dir="${srcDirectory}" defaultexcludes="yes">
+                <include name="edu/**"/>
+            </packageset>
+	</javadoc>
+    </target>
+</project>
